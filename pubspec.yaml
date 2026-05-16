@@ -1,0 +1,26 @@
+name: otel_flutter_command
+description: >-
+  OpenTelemetry instrumentation for package:flutter_command. Wraps
+  every Command execution in a CLIENT-kind span so you can see how
+  long each UI-triggered action takes and which ones fail.
+version: 0.1.0-beta.1-wip
+repository: https://github.com/dartastic/otel_flutter_command
+homepage: https://dartastic.io
+
+environment:
+  sdk: ^3.0.0
+  flutter: ">=3.0.0"
+
+dependencies:
+  dartastic_opentelemetry: ^1.1.0-beta.5
+  dartastic_opentelemetry_api: ^1.0.0-beta.6
+  flutter:
+    sdk: flutter
+  flutter_command: ^4.0.0
+
+dev_dependencies:
+  dart_flutter_team_lints: ^3.5.2
+  flutter_test:
+    sdk: flutter
+  pub_semver: ^2.0.0
+  pubspec_parse: ^1.5.0
