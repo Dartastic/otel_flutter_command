@@ -23,7 +23,6 @@ late final AuthService auth;
 Future<void> main() async {
   await OTel.initialize(
     serviceName: 'flutter-command-demo',
-    endpoint: 'http://localhost:4317',
   );
   auth = AuthService();
   runApp(const MyApp());
