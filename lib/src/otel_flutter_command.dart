@@ -57,11 +57,13 @@ extension OTelCommand<TParam, TResult> on fc.Command<TParam, TResult> {
   /// Synchronous-style executor: opens a span, calls [execute],
   /// closes the span when [execute] returns or throws.
   ///
-  /// Note: `flutter_command` swallows exceptions on async commands
-  /// by default (`catchAlwaysDefault = true`). This wrapper only
-  /// sees a span as "error" if the exception escapes; for async
-  /// commands prefer [executeTracedWithFuture], which awaits and
-  /// can see swallowed errors via the [fc.CommandResult].
+  /// Note: `flutter_command` routes exceptions through its
+  /// `ErrorFilter` system (default: global handler if no local
+  /// `.errors` listener) rather than rethrowing them. This wrapper
+  /// only sees a span as "error" if the exception escapes or lands
+  /// in the [fc.CommandResult]; for async commands prefer
+  /// [executeTracedWithFuture], which awaits the execution and sees
+  /// filtered errors via the completed-with-error future.
   void executeTraced([TParam? param, String spanName = '<anonymous>']) {
     if (flutterCommandInstrumentationSuppressed()) {
       execute(param);
@@ -122,7 +124,7 @@ void _endFromResult(Span span, fc.CommandResult result) {
         ),
         if (err != null)
           OTel.attributeString(
-            ErrorResource.errorType.key,
+            ErrorAttributes.errorType.key,
             err.runtimeType.toString(),
           ),
       ]),
@@ -150,7 +152,7 @@ void _endError(Span span, Object error, StackTrace stackTrace) {
         'error',
       ),
       OTel.attributeString(
-        ErrorResource.errorType.key,
+        ErrorAttributes.errorType.key,
         error.runtimeType.toString(),
       ),
     ]),

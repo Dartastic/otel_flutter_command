@@ -12,7 +12,7 @@ and which ones throw.
 
 ```yaml
 dependencies:
-  flutter_command: ^4.0.0
+  flutter_command: ^7.0.0
   otel_flutter_command: ^0.1.0
 ```
 

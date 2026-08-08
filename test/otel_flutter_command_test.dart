@@ -2,11 +2,10 @@
 // Copyright 2025, Mindful Software LLC, All rights reserved.
 
 import 'package:dartastic_opentelemetry/dartastic_opentelemetry.dart';
+import 'package:dartastic_opentelemetry/testing.dart';
 import 'package:flutter_command/flutter_command.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:otel_flutter_command/otel_flutter_command.dart';
-
-import 'package:dartastic_opentelemetry/testing.dart';
 
 void main() {
   late TestHarness harness;
@@ -17,6 +16,11 @@ void main() {
       serviceName: 'otel_flutter_command-test',
     );
     spans = harness.spans;
+    // flutter_command >=5 routes errors through its ErrorFilter system;
+    // the default filter asserts (debug mode) when neither a local
+    // `.errors` listener nor a global handler is registered. Register a
+    // global handler, as a real app would.
+    Command.globalExceptionHandler = (error, stackTrace) {};
   });
 
   setUp(() {

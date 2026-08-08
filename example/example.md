@@ -1,7 +1,7 @@
 # otel_flutter_command example
 
 A login form whose submit button taps emit a span you can find in
-Jaeger / Tempo / etc.
+Jaeger, Zipkin, or any OTLP backend.
 
 ```dart
 // example/lib/main.dart
@@ -24,6 +24,11 @@ Future<void> main() async {
   await OTel.initialize(
     serviceName: 'flutter-command-demo',
   );
+  // flutter_command's default ErrorFilter expects a local `.errors`
+  // listener or this global handler; without one, debug builds assert.
+  Command.globalExceptionHandler = (error, stackTrace) {
+    debugPrint('command failed: $error');
+  };
   auth = AuthService();
   runApp(const MyApp());
 }
