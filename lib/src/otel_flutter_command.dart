@@ -1,14 +1,14 @@
 // Licensed under the Apache License, Version 2.0
 // Copyright 2025, Mindful Software LLC, All rights reserved.
 
-import 'package:dartastic_opentelemetry/dartastic_opentelemetry.dart';
+import 'package:dartastic_opentelemetry_api/dartastic_opentelemetry_api.dart';
 import 'package:flutter_command/flutter_command.dart' as fc;
 
 import 'otel_flutter_command_suppression.dart';
 
 const _tracerName = 'otel_flutter_command';
 
-Tracer _tracer() => OTel.tracerProvider().getTracer(_tracerName);
+APITracer _tracer() => OTelAPI.tracerProvider().getTracer(_tracerName);
 
 /// Typed attribute keys for flutter_command spans.
 ///
@@ -102,28 +102,28 @@ extension OTelCommand<TParam, TResult> on fc.Command<TParam, TResult> {
   }
 }
 
-Span _openSpan(String name) {
+APISpan _openSpan(String name) {
   return _tracer().startSpan(
     'flutter_command $name',
     kind: SpanKind.client,
-    attributes: OTel.attributesFromMap(<String, Object>{
+    attributes: OTelAPI.attributesFromMap(<String, Object>{
       FlutterCommandSemantics.commandName.key: name,
       FlutterCommandSemantics.commandSystem.key: 'flutter_command',
     }),
   );
 }
 
-void _endFromResult(Span span, fc.CommandResult result) {
+void _endFromResult(APISpan span, fc.CommandResult result) {
   if (result.hasError) {
     final err = result.error;
     span.addAttributes(
-      OTel.attributes([
-        OTel.attributeString(
+      OTelAPI.attributes([
+        OTelAPI.attributeString(
           FlutterCommandSemantics.commandResult.key,
           'error',
         ),
         if (err != null)
-          OTel.attributeString(
+          OTelAPI.attributeString(
             ErrorAttributes.errorType.key,
             err.runtimeType.toString(),
           ),
@@ -133,8 +133,8 @@ void _endFromResult(Span span, fc.CommandResult result) {
     span.setStatus(SpanStatusCode.Error, err?.toString() ?? 'command error');
   } else {
     span.addAttributes(
-      OTel.attributes([
-        OTel.attributeString(
+      OTelAPI.attributes([
+        OTelAPI.attributeString(
           FlutterCommandSemantics.commandResult.key,
           'success',
         ),
@@ -144,14 +144,14 @@ void _endFromResult(Span span, fc.CommandResult result) {
   span.end();
 }
 
-void _endError(Span span, Object error, StackTrace stackTrace) {
+void _endError(APISpan span, Object error, StackTrace stackTrace) {
   span.addAttributes(
-    OTel.attributes([
-      OTel.attributeString(
+    OTelAPI.attributes([
+      OTelAPI.attributeString(
         FlutterCommandSemantics.commandResult.key,
         'error',
       ),
-      OTel.attributeString(
+      OTelAPI.attributeString(
         ErrorAttributes.errorType.key,
         error.runtimeType.toString(),
       ),
