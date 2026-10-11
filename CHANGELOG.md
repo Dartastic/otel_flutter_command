@@ -1,6 +1,6 @@
 # Changelog
 
-## [0.2.0-wip]
+## [1.0.0-wip]
 
 ### Changed
 
@@ -47,3 +47,10 @@
   `==`, which means a sync command whose result equals its initial
   value emits no event at all. Per-call instrumentation sidesteps
   both issues.
+
+### Changed
+
+- Requires `dartastic_opentelemetry ^1.1.0-beta.17` and
+  `dartastic_opentelemetry_api >=1.0.0-rc.4 <1.0.0-rc.5`.
+- First 1.0 release: the public API of this package is stable and
+  follows semantic versioning from here on.
