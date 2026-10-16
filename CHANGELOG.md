@@ -4,6 +4,7 @@
 
 ### Changed
 
+- README: standard header naming the instrumented library, its supported platforms and project links; pubspec description to match.
 - Semantic conventions updated to the current OTel registry: deprecated
   attribute keys are no longer emitted (`db.system` -> `db.system.name`,
   `db.operation` -> `db.operation.name`, `rpc.system` -> `rpc.system.name`,
